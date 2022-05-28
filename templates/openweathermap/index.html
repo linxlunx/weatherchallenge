@@ -1,83 +1,66 @@
-<!doctype html>
+{% extends 'base/base.html' %}
 {% load static %}
 {% load i18n %}
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
-    <meta name="generator" content="Hugo 0.84.0">
-    <title>OpenWeatherMap Challenge</title>
 
-    <link rel="canonical" href="https://getbootstrap.com/docs/5.0/examples/jumbotron/">
-
-    <!-- Bootstrap core CSS -->
-    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet" crossorigin="anonymous">
-
-    <meta name="theme-color" content="#7952b3">
-
-
-    <style>
-        .bd-placeholder-img {
-            font-size: 1.125rem;
-            text-anchor: middle;
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            user-select: none;
-        }
-
-        @media (min-width: 768px) {
-            .bd-placeholder-img-lg {
-                font-size: 3.5rem;
-            }
-        }
-    </style>
-
-
-</head>
-<body>
-
-<main>
-    <div class="container py-4">
-        <header class="pb-3 mb-4">
-            <a href="/" class="d-flex float-lg-start text-dark text-decoration-none">
-                <span class="fs-4">OpenWeatherMap Challenge</span>
-            </a>
-        </header>
-
-        <form action="{% url 'set_language' %}" method="post">  {#2#}
-            {% csrf_token %} {#3#}
-            <select name="language">  {#4#}
-                {% get_current_language as LANGUAGE_CODE %} {#5#}
-                {% get_available_languages as LANGUAGES %} {#6#}
-                {% get_language_info_list for LANGUAGES as languages %} {#7#}
-                {% for language in languages %}
-                    <option value="{{ language.code }}"{% if language.code == LANGUAGE_CODE %} selected{% endif %}>
-                        {#8#}
-                        {{ language.name_local }} ({{ language.code }})
-                    </option>
-                {% endfor %}
-            </select>
-            <input type="submit" value="Switch"> {#9#}
-        </form>
-
-        <div class="p-5 mb-4 bg-light rounded-3">
-            <div class="row">
-                <h5>{% trans "Index Title" %}</h5>
-            </div>
-
-            <div class="row">
-                {% trans "Input City Name" %}
-            </div>
-        </div>
-
-        <footer class="pt-3 mt-4 text-muted border-top">
-            &copy; 2022
-        </footer>
+{% block content %}
+    <div class="row">
+        <h5>{% trans "Index Title" %}</h5>
     </div>
-</main>
 
+    {% if errors %}
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <strong>{%  trans "Error Submit" %}!</strong><br/>{% trans "Please Check City Name" %}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endif %}
 
-</body>
-</html>
+    <div class="row">
+        <div class="col-6">
+            <form method="POST">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label class="form-label">{% trans "Input City Name" %}</label>
+                    <select class="form-control" name="city" id="city_form"></select>
+                    <input type="hidden" name="latitude" id="latitude_form">
+                    <input type="hidden" name="longitude" id="longitude_form">
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        $('#city_form').select2({
+            minimumInputLength: 3,
+            ajax: {
+                url: '/openweathermap/api/cities',
+                delay: 250,
+                cache: true,
+                data: function (params) {
+                    var query = {
+                        name: params.term
+                    }
+                    return query
+                },
+                processResults: function (data) {
+                    let newData = []
+                    $.each(data.cities, function (i, d) {
+                        let city_fullname = [d.local_name, d.country]
+                        newData.push({id: d.id, text: city_fullname.join(", "), latitude: d.lat, longitude: d.lon})
+                    })
+                    return {
+                        results: newData
+                    }
+                }
+            }
+        })
+
+        $('#city_form').on('select2:select', function (e) {
+            var data = e.params.data
+            $('#latitude_form').val(data.latitude)
+            $('#longitude_form').val(data.longitude)
+        })
+    </script>
+{% endblock %}

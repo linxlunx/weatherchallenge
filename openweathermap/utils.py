@@ -26,17 +26,18 @@ class OpenWeatherMapUtil:
         location_search_url = f'geo/1.0/direct?q={city_name}&limit=5'
         resp = asyncio.run(self.get_url(location_search_url))
         cities = []
-        for r in resp:
+        for i, r in enumerate(resp):
             if 'local_names' in r:
-                local_name = r['local_names'][self.lang if self.lang in r['local_names'] else 'en']
-                cities.append({
-                    'name': r['name'],
-                    'local_name': local_name,
-                    'lat': r['lat'],
-                    'lon': r['lon'],
-                    'country': r['country'],
-                    'state': r['state']
-                })
+                if self.lang in r['local_names']:
+                    local_name = r['local_names'][self.lang]
+                    cities.append({
+                        'id': i,
+                        'name': r['name'],
+                        'local_name': local_name,
+                        'lat': r['lat'],
+                        'lon': r['lon'],
+                        'country': r['country'],
+                    })
         return cities
 
     def get_weather(self, lat: float, lon: float) -> dict:

@@ -24,3 +24,9 @@ msgstr "Get Weather Data by Place Name"
 
 msgid "Input City Name"
 msgstr "Input City Name"
+
+msgid "Error Submit"
+msgstr "Error Submit"
+
+msgid "Please Check City Name"
+msgstr "Please Check City Name"

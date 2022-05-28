@@ -24,3 +24,9 @@ msgstr "Obtenir des données météorologiques par nom de lieu"
 
 msgid "Input City Name"
 msgstr "Entrez le nom de la ville"
+
+msgid "Error Submit"
+msgstr "Erreur de soumission"
+
+msgid "Please Check City Name"
+msgstr "Veuillez vérifier le nom de la ville"
