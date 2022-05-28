@@ -14,8 +14,12 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include, re_path
+from django.views.generic import RedirectView
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    # path('admin/', admin.site.urls),
+    re_path('^$', RedirectView.as_view(pattern_name='openweathermap:index')),
+    path('openweathermap/', include('openweathermap.urls')),
+    path('i18n/', include('django.conf.urls.i18n')),
 ]
