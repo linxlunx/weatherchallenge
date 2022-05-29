@@ -1,10 +1,9 @@
 from django.conf import settings
 import aiohttp
-import asyncio
 from typing import List
 from django.core.cache import cache
 from decimal import Decimal
-from datetime import datetime
+import asyncio
 
 
 class OpenWeatherMapUtil:
@@ -21,9 +20,12 @@ class OpenWeatherMapUtil:
                 url = f'{self.API_URL}/{path}&appid={self.API_KEY}&lang={self.lang}'
                 async with session.get(url) as response:
                     data = await response.json()
+                    if 'cod' in data:
+                        if data['cod'] != 200:
+                            raise ValueError(data['message'])
                     return data
             except (aiohttp.ServerTimeoutError, aiohttp.ClientConnectorError) as err:
-                print(err)
+                raise ValueError(str(err))
 
     def find_city_by_name(self, city_name: str) -> List[dict]:
         # check query in cache
@@ -36,7 +38,7 @@ class OpenWeatherMapUtil:
         location_search_url = f'geo/1.0/direct?q={city_name}&limit=5'
         resp = asyncio.run(self.get_url(location_search_url))
         cities = []
-        for i, r in enumerate(resp):
+        for r in resp:
             if 'local_names' in r:
                 if self.lang in r['local_names']:
                     local_name = r['local_names'][self.lang]

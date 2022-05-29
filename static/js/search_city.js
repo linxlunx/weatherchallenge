@@ -19,6 +19,12 @@ $('#city_form').select2({
             return {
                 results: newData
             }
+        },
+        error: function (jqXHR, status, error) {
+            if (jqXHR.status != 200) {
+                let err = "Error connecting to API: " + jqXHR.responseJSON.errors
+                alert(err);
+            }
         }
     }
 })

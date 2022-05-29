@@ -15,10 +15,12 @@ class OpenWeatherMapView(View):
         form = forms.OpenWeatherMapGetDetailForm(request.POST)
         if not form.is_valid():
             return render(request, 'openweathermap/index.html', {'errors': form.errors})
-        weather = utils.OpenWeatherMapUtil(request.LANGUAGE_CODE).get_weather(form.cleaned_data['latitude'],
-                                                                              form.cleaned_data['longitude'])
-        if weather['cod'] != 200:
-            return render(request, 'openweathermap/index.html', {'errors': weather['message']})
+        try:
+            weather = utils.OpenWeatherMapUtil(request.LANGUAGE_CODE).get_weather(form.cleaned_data['latitude'],
+                                                                                  form.cleaned_data['longitude'])
+        except Exception as err:
+            err_message = f'Error connect to openweathermap: {err}'
+            return render(request, 'openweathermap/index.html', {'errors': err_message})
         return render(request, 'openweathermap/index.html', {'weather': weather, 'city': form.cleaned_data['city']})
 
 
@@ -27,5 +29,8 @@ class OpenWeatherMapAPIFindCityView(View):
         form = forms.OpenWeatherMapFindCityForm(request.GET)
         if not form.is_valid():
             return JsonResponse(status=412, data={'errors': form.errors})
-        cities = utils.OpenWeatherMapUtil(request.LANGUAGE_CODE).find_city_by_name(form.cleaned_data['name'])
+        try:
+            cities = utils.OpenWeatherMapUtil(request.LANGUAGE_CODE).find_city_by_name(form.cleaned_data['name'])
+        except Exception as err:
+            return JsonResponse(status=400, data={'errors': str(err)})
         return JsonResponse({'cities': cities})
