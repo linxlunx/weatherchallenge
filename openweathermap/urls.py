@@ -4,6 +4,6 @@ from . import views
 
 app_name = 'openweathermap'
 urlpatterns = [
-    path('', views.OpenWeatherMapView.as_view(), name='index'),
-    path('api/cities', views.OpenWeatherMapAPIFindCityView.as_view(), name='search_city_api')
+    path('', views.openweathermap_view, name='openweathermap_index'),
+    path('api/cities', views.search_city, name='openweathermap_search_city_api')
 ]

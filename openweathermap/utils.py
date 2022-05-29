@@ -3,7 +3,6 @@ import aiohttp
 from typing import List
 from django.core.cache import cache
 from decimal import Decimal
-import asyncio
 from . import decorators
 
 
@@ -30,9 +29,13 @@ class OpenWeatherMapUtil:
                 raise ValueError(str(err))
 
     @decorators.use_cache
-    def find_city_by_name(self, city_name: str) -> List[dict]:
+    async def find_city_by_name(self, city_name: str) -> List[dict]:
+        """
+        Get list of cities by names
+        Return by local languanges if exist
+        """
         location_search_url = f'geo/1.0/direct?q={city_name}&limit=5'
-        resp = asyncio.run(self.get_url(location_search_url))
+        resp = await self.get_url(location_search_url)
         cities = []
         for r in resp:
             # get local name if exist
@@ -59,14 +62,17 @@ class OpenWeatherMapUtil:
 
     @staticmethod
     def convert_temperature(temp_celcius: float) -> List[float]:
+        """
+        Convert temperature from Celcius to Fahrenheit and Kelvin
+        """
         temperatures = [temp_celcius, round(((temp_celcius * 9 / 5) + 32), 2), round((temp_celcius + 273.15), 2)]
         return temperatures
 
     @decorators.use_cache
-    def get_weather(self, lat: Decimal, lon: Decimal) -> dict:
+    async def get_weather(self, lat: Decimal, lon: Decimal) -> dict:
         # get weather detail from openweathermap
         weather_detail_url = f'data/2.5/weather?lat={lat}&lon={lon}&units=metric'
-        resp = asyncio.run(self.get_url(weather_detail_url))
+        resp = await self.get_url(weather_detail_url)
 
         # convert degrees to direction
         degrees = (int(resp['wind']['deg'] * 8 / 360) + 8) % 8
