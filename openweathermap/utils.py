@@ -4,6 +4,7 @@ from typing import List
 from django.core.cache import cache
 from decimal import Decimal
 import asyncio
+from . import decorators
 
 
 class OpenWeatherMapUtil:
@@ -27,14 +28,8 @@ class OpenWeatherMapUtil:
             except (aiohttp.ServerTimeoutError, aiohttp.ClientConnectorError) as err:
                 raise ValueError(str(err))
 
+    @decorators.use_cache
     def find_city_by_name(self, city_name: str) -> List[dict]:
-        # check query in cache
-        cache_key = f'city_{self.lang}_{city_name}'
-        city_exist = cache.get(cache_key)
-        if city_exist:
-            return city_exist
-
-        # get cities list from openweathermap
         location_search_url = f'geo/1.0/direct?q={city_name}&limit=5'
         resp = asyncio.run(self.get_url(location_search_url))
         cities = []
@@ -57,18 +52,13 @@ class OpenWeatherMapUtil:
             })
 
         # set cache
-        cache.set(cache_key, cities)
+        cache.set(f'{self.lang}_{city_name}', cities)
         return cities
 
+    @decorators.use_cache
     def get_weather(self, lat: Decimal, lon: Decimal) -> dict:
-        # check weather by lat lon in cache
-        cache_key = f'weather_{self.lang}_{lat}_{lon}'
-        weather_exist = cache.get(cache_key)
-        if weather_exist:
-            return weather_exist
-
         # get weather detail from openweathermap
         weather_detail_url = f'data/2.5/weather?lat={lat}&lon={lon}&units=metric'
         resp = asyncio.run(self.get_url(weather_detail_url))
-        cache.set(cache_key, resp)
+        cache.set(f'{self.lang}_{lat}_{lon}', resp)
         return resp
