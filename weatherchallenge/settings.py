@@ -153,6 +153,6 @@ CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
         'LOCATION': env.str('MEMCACHED_HOST'),
-        'TIMEOUT': env.int('MEMCACHED_TIMEOUT')
+        'TIMEOUT': env.int('MEMCACHED_TIMEOUT', 5) * 60
     }
 }
