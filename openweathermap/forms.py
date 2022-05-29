@@ -6,6 +6,7 @@ class OpenWeatherMapFindCityForm(forms.Form):
 
 
 class OpenWeatherMapGetDetailForm(forms.Form):
+    city = forms.CharField()
     latitude = forms.FloatField()
     longitude = forms.FloatField()
 

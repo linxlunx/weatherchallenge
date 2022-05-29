@@ -9,7 +9,7 @@
 
     {% if errors %}
         <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            <strong>{%  trans "Error Submit" %}!</strong><br/>{% trans "Please Check City Name" %}
+            <strong>{% trans "Error Submit" %}!</strong><br/>{% trans "Please Check City Name" %}
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     {% endif %}
@@ -28,39 +28,72 @@
             </form>
         </div>
     </div>
+
+    {% if weather %}
+        <div class="row" style="margin-top: 20px;">
+            <div class="col-6">
+                <h5>Weather Detail</h5>
+                <table class="table">
+                    <tbody>
+                    <tr>
+                        <th>{% trans "Country" %}</th>
+                        <td>{{ weather.sys.country }}</td>
+                    </tr>
+                    <tr>
+                        <th>{% trans "City" %}</th>
+                        <td>{{ city }}</td>
+                    </tr>
+                    <tr>
+                        <th>{% trans "Longitude" %}</th>
+                        <td>{{ weather.coord.lon }}</td>
+                    </tr>
+                    <tr>
+                        <th>{% trans "Latitude" %}</th>
+                        <td>{{ weather.coord.lat }}</td>
+                    </tr>
+                    <tr>
+                        <th>{% trans "Weather" %}</th>
+                        <td>{{ weather.weather.0.description }}</td>
+                    </tr>
+                    <tr>
+                        <th>{% trans "Temperature" %}</th>
+                        <td>{{ weather.main.temp }}</td>
+                    </tr>
+                    <tr>
+                        <th>{% trans "Feels Like" %}</th>
+                        <td>{{ weather.main.feels_like }}</td>
+                    </tr>
+                    <tr>
+                        <th>{% trans "Temperature Minimum" %}</th>
+                        <td>{{ weather.main.temp_min }}</td>
+                    </tr>
+                    <tr>
+                        <th>{% trans "Temperature Maximum" %}</th>
+                        <td>{{ weather.main.temp_max }}</td>
+                    </tr>
+                    <tr>
+                        <th>{% trans "Pressure" %}</th>
+                        <td>{{ weather.main.pressure }}</td>
+                    </tr>
+                    <tr>
+                        <th>{% trans "Humidity" %}</th>
+                        <td>{{ weather.main.humidity }}</td>
+                    </tr>
+                    <tr>
+                        <th>{% trans "Wind Speed" %}</th>
+                        <td>{{ weather.wind.speed }}</td>
+                    </tr>
+                    <tr>
+                        <th>{% trans "Wind Degrees" %}</th>
+                        <td>{{ weather.wind.deg }}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    {% endif %}
 {% endblock %}
 
 {% block scripts %}
-    <script>
-        $('#city_form').select2({
-            minimumInputLength: 3,
-            ajax: {
-                url: '/openweathermap/api/cities',
-                delay: 250,
-                cache: true,
-                data: function (params) {
-                    var query = {
-                        name: params.term
-                    }
-                    return query
-                },
-                processResults: function (data) {
-                    let newData = []
-                    $.each(data.cities, function (i, d) {
-                        let city_fullname = [d.local_name, d.country]
-                        newData.push({id: d.id, text: city_fullname.join(", "), latitude: d.lat, longitude: d.lon})
-                    })
-                    return {
-                        results: newData
-                    }
-                }
-            }
-        })
-
-        $('#city_form').on('select2:select', function (e) {
-            var data = e.params.data
-            $('#latitude_form').val(data.latitude)
-            $('#longitude_form').val(data.longitude)
-        })
-    </script>
+    <script src="{% static 'js/search_city.js' %}"></script>
 {% endblock %}

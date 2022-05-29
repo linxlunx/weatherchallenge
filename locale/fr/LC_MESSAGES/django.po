@@ -30,3 +30,46 @@ msgstr "Erreur de soumission"
 
 msgid "Please Check City Name"
 msgstr "Veuillez vérifier le nom de la ville"
+
+msgid "Weather Detail"
+msgstr "Détail météo"
+
+msgid "Country"
+msgstr "Pays"
+
+msgid "City"
+msgstr "Ville"
+
+msgid "Longitude"
+msgstr "Longitude"
+
+msgid "Latitude"
+msgstr "Latitude"
+
+msgid "Weather"
+msgstr "Temps"
+
+msgid "Temperature"
+msgstr "Température"
+
+msgid "Feels Like"
+msgstr "Se sentir"
+
+msgid "Minimum Temperature"
+msgstr "Température minimale"
+
+msgid "Maximum Temperature"
+msgstr "Température maximale"
+
+msgid "Pressure"
+msgstr "Pression"
+
+msgid "Humidity"
+msgstr "Humidité"
+
+msgid "Wind Speed"
+msgstr "Vitesse du vent"
+
+msgid "Wind Degrees"
+msgstr "Degrés de vent"
+

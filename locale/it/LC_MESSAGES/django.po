@@ -30,3 +30,45 @@ msgstr "Errore inviare"
 
 msgid "Please Check City Name"
 msgstr "Si prega di controllare il nome della città"
+
+msgid "Weather Detail"
+msgstr "Dettagli meteo"
+
+msgid "Country"
+msgstr "Paese"
+
+msgid "City"
+msgstr "Città"
+
+msgid "Longitude"
+msgstr "Longitude"
+
+msgid "Latitude"
+msgstr "Latitude"
+
+msgid "Weather"
+msgstr "Tempo atmosferico"
+
+msgid "Temperature"
+msgstr "Temperatura"
+
+msgid "Feels Like"
+msgstr "Si sente come"
+
+msgid "Minimum Temperature"
+msgstr "Temperatura minima"
+
+msgid "Maximum Temperature"
+msgstr "Temperatura massima"
+
+msgid "Pressure"
+msgstr "Pressione"
+
+msgid "Humidity"
+msgstr "Umidità"
+
+msgid "Wind Speed"
+msgstr "Velocità del vento"
+
+msgid "Wind Degrees"
+msgstr "Gradi di vento"

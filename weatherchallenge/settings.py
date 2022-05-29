@@ -147,3 +147,12 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Openweather Settings
 OPENWEATHERMAP_API_URL = env.str('OPENWEATHERMAP_API_URL', default='https://api.openweathermap.org')
 OPENWEATHERMAP_API_KEY = env.str('OPENWEATHERMAP_API_KEY', default='')
+
+# Cache Settings
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+        'LOCATION': env.str('MEMCACHED_HOST'),
+        'TIMEOUT': env.int('MEMCACHED_TIMEOUT')
+    }
+}

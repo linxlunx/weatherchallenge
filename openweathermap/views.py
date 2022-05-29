@@ -15,7 +15,11 @@ class OpenWeatherMapView(View):
         form = forms.OpenWeatherMapGetDetailForm(request.POST)
         if not form.is_valid():
             return render(request, 'openweathermap/index.html', {'errors': form.errors})
-        return render(request, '')
+        weather = utils.OpenWeatherMapUtil(request.LANGUAGE_CODE).get_weather(form.cleaned_data['latitude'],
+                                                                              form.cleaned_data['longitude'])
+        if weather['cod'] != 200:
+            return render(request, 'openweathermap/index.html', {'errors': weather['message']})
+        return render(request, 'openweathermap/index.html', {'weather': weather, 'city': form.cleaned_data['city']})
 
 
 class OpenWeatherMapAPIFindCityView(View):
