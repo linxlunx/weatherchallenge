@@ -14,6 +14,7 @@ class OpenWeatherMapUtil:
         if lang is None:
             lang = 'en'
         self.lang = lang
+        self.directions = ['north', 'northeast', 'east', 'southeast', 'south', 'southwest', 'west', 'northwest']
 
     async def get_url(self, path: str) -> dict:
         async with aiohttp.ClientSession() as session:
@@ -34,6 +35,7 @@ class OpenWeatherMapUtil:
         resp = asyncio.run(self.get_url(location_search_url))
         cities = []
         for r in resp:
+            # get local name if exist
             if 'local_names' in r:
                 if self.lang in r['local_names']:
                     local_name = r['local_names'][self.lang]
@@ -55,10 +57,25 @@ class OpenWeatherMapUtil:
         cache.set(f'{self.lang}_{city_name}', cities)
         return cities
 
+    @staticmethod
+    def convert_temperature(temp_celcius: float) -> List[float]:
+        temperatures = [temp_celcius, round(((temp_celcius * 9 / 5) + 32), 2), round((temp_celcius + 273.15), 2)]
+        return temperatures
+
     @decorators.use_cache
     def get_weather(self, lat: Decimal, lon: Decimal) -> dict:
         # get weather detail from openweathermap
         weather_detail_url = f'data/2.5/weather?lat={lat}&lon={lon}&units=metric'
         resp = asyncio.run(self.get_url(weather_detail_url))
+
+        # convert degrees to direction
+        degrees = (int(resp['wind']['deg'] * 8 / 360) + 8) % 8
+        resp['direction'] = self.directions[degrees]
+
+        # convert temperatures: C, F, K
+        resp['temperatures'] = self.convert_temperature(resp['main']['temp'])
+        resp['temperatures_min'] = self.convert_temperature(resp['main']['temp_min'])
+        resp['temperatures_max'] = self.convert_temperature(resp['main']['temp_max'])
+
         cache.set(f'{self.lang}_{lat}_{lon}', resp)
         return resp

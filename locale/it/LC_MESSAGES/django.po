@@ -72,3 +72,33 @@ msgstr "Velocità del vento"
 
 msgid "Wind Degrees"
 msgstr "Gradi di vento"
+
+msgid "Description"
+msgstr "Descrizione"
+
+msgid "Wind Direction"
+msgstr "La direzione del vento"
+
+msgid "north"
+msgstr "nord"
+
+msgid "northeast"
+msgstr "nord-est"
+
+msgid "east"
+msgstr "est"
+
+msgid "southeast"
+msgstr "sud-est"
+
+msgid "south"
+msgstr "sud"
+
+msgid "southwest"
+msgstr "sud-ovest"
+
+msgid "west"
+msgstr "ovest"
+
+msgid "northwest"
+msgstr "nord ovest"

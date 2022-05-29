@@ -31,7 +31,7 @@
 
     {% if weather %}
         <div class="row" style="margin-top: 20px;">
-            <div class="col-6">
+            <div class="col-8">
                 <h5>{% trans "Weather Detail" %}</h5>
                 <table class="table">
                     <tbody>
@@ -44,32 +44,26 @@
                         <td>{{ city }}</td>
                     </tr>
                     <tr>
-                        <th>{% trans "Longitude" %}</th>
-                        <td>{{ weather.coord.lon }}</td>
-                    </tr>
-                    <tr>
-                        <th>{% trans "Latitude" %}</th>
-                        <td>{{ weather.coord.lat }}</td>
-                    </tr>
-                    <tr>
-                        <th>{% trans "Weather" %}</th>
+                        <th>{% trans "Description" %}</th>
                         <td>{{ weather.weather.0.description }}</td>
                     </tr>
                     <tr>
                         <th>{% trans "Temperature" %}</th>
-                        <td>{{ weather.main.temp }}</td>
-                    </tr>
-                    <tr>
-                        <th>{% trans "Feels Like" %}</th>
-                        <td>{{ weather.main.feels_like }}</td>
+                        <td>{{ weather.temperatures.0 }} &#8451;</td>
+                        <td>{{ weather.temperatures.1 }} &#8457;</td>
+                        <td>{{ weather.temperatures.2 }} &#8490;</td>
                     </tr>
                     <tr>
                         <th>{% trans "Temperature Minimum" %}</th>
-                        <td>{{ weather.main.temp_min }}</td>
+                        <td>{{ weather.temperatures_min.0 }} &#8451;</td>
+                        <td>{{ weather.temperatures_min.1 }} &#8457;</td>
+                        <td>{{ weather.temperatures_min.2 }} &#8490;</td>
                     </tr>
                     <tr>
                         <th>{% trans "Temperature Maximum" %}</th>
-                        <td>{{ weather.main.temp_max }}</td>
+                        <td>{{ weather.temperatures_max.0 }} &#8451;</td>
+                        <td>{{ weather.temperatures_max.1 }} &#8457;</td>
+                        <td>{{ weather.temperatures_max.2 }} &#8490;</td>
                     </tr>
                     <tr>
                         <th>{% trans "Pressure" %}</th>
@@ -84,8 +78,8 @@
                         <td>{{ weather.wind.speed }}</td>
                     </tr>
                     <tr>
-                        <th>{% trans "Wind Degrees" %}</th>
-                        <td>{{ weather.wind.deg }}</td>
+                        <th>{% trans "Wind Direction" %}</th>
+                        <td>{% trans weather.direction %}</td>
                     </tr>
                     </tbody>
                 </table>
