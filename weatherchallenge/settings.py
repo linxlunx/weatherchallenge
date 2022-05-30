@@ -14,14 +14,23 @@ import os
 from pathlib import Path
 import environ
 from django.utils.translation import gettext_lazy as _
+import sys
 
+# check
+TESTING = len(sys.argv) > 1 and sys.argv[1] == 'test'
 
 env = environ.Env()
-environ.Env.read_env()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+if not TESTING:
+    environ.Env.read_env()
+else:
+    if not os.path.exists('weatherchallenge/test.env'):
+        print('Please setup your test.env file!')
+        sys.exit()
+    environ.Env.read_env('weatherchallenge/test.env')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/

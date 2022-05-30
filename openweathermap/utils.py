@@ -15,10 +15,14 @@ class OpenWeatherMapUtil:
         self.lang = lang
         self.directions = ['north', 'northeast', 'east', 'southeast', 'south', 'southwest', 'west', 'northwest']
 
-    async def get_url(self, path: str) -> dict:
-        async with aiohttp.ClientSession() as session:
+    def build_url(self, path: str) -> str:
+        url = f'{self.API_URL}/{path}&appid={self.API_KEY}&lang={self.lang}'
+        return url
+
+    async def get_url(self, url: str) -> dict:
+        timeout = aiohttp.ClientTimeout(total=10)
+        async with aiohttp.ClientSession(timeout=timeout) as session:
             try:
-                url = f'{self.API_URL}/{path}&appid={self.API_KEY}&lang={self.lang}'
                 async with session.get(url) as response:
                     data = await response.json()
                     if 'cod' in data:
@@ -34,7 +38,8 @@ class OpenWeatherMapUtil:
         Get list of cities by names
         Return by local languanges if exist
         """
-        location_search_url = f'geo/1.0/direct?q={city_name}&limit=5'
+        location_search_path = f'geo/1.0/direct?q={city_name}&limit=5'
+        location_search_url = self.build_url(location_search_path)
         resp = await self.get_url(location_search_url)
         cities = []
         for r in resp:
@@ -65,13 +70,19 @@ class OpenWeatherMapUtil:
         """
         Convert temperature from Celcius to Fahrenheit and Kelvin
         """
+        try:
+            float(temp_celcius)
+        except Exception as err:
+            raise ValueError(err)
+
         temperatures = [temp_celcius, round(((temp_celcius * 9 / 5) + 32), 2), round((temp_celcius + 273.15), 2)]
         return temperatures
 
     @decorators.use_cache
-    async def get_weather(self, lat: Decimal, lon: Decimal) -> dict:
+    async def get_weather(self, lat: float, lon: float) -> dict:
         # get weather detail from openweathermap
-        weather_detail_url = f'data/2.5/weather?lat={lat}&lon={lon}&units=metric'
+        weather_detail_path = f'data/2.5/weather?lat={lat}&lon={lon}&units=metric'
+        weather_detail_url = self.build_url(weather_detail_path)
         resp = await self.get_url(weather_detail_url)
 
         # convert degrees to direction
