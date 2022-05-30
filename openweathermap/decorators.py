@@ -4,7 +4,7 @@ from functools import wraps
 
 def use_cache(fn):
     @wraps(fn)
-    def wrapper(*args, **kwargs):
+    async def wrapper(*args, **kwargs):
         if len(args) < 2:
             raise ValueError('Invalid Argument for Decorator')
 
@@ -14,7 +14,7 @@ def use_cache(fn):
             key = f'{args[0].lang}_{args[1]}_{args[2]}'
         cached = cache.get(key)
         if not cached:
-            return fn(*args, **kwargs)
+            return await fn(*args, **kwargs)
         return cached
     return wrapper
 
