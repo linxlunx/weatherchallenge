@@ -5,6 +5,9 @@ from functools import wraps
 def use_cache(fn):
     @wraps(fn)
     def wrapper(*args, **kwargs):
+        if len(args) < 2:
+            raise ValueError('Invalid Argument for Decorator')
+
         if len(args) == 2:
             key = f'{args[0].lang}_{args[1]}'
         else:
