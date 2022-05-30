@@ -5,3 +5,16 @@ services:
     image: docker.io/bitnami/memcached:1
     ports:
       - '11211:11211'
+  weatherchallenge:
+    build: .
+    ports:
+      - '8000:80'
+    links:
+      - 'memcached:memchaced'
+    environment:
+      SHORT_URL: "http://short.est"
+      SECRET_KEY: "mysecretkey123456"
+      OPENWEATHERMAP_API_URL: "https://api.openweathermap.org"
+      OPENWEATHERMAP_API_KEY: "MyAPIKey"
+      MEMCACHED_HOST: "memcached:11211"
+      MEMCACHED_TIMEOUT: 5
