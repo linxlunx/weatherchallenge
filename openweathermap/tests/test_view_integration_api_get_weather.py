@@ -3,8 +3,12 @@ from django.urls import reverse
 import re
 from django.core.cache import cache
 from http.cookies import SimpleCookie
+from unittest import skipIf
+from openweathermap.tests.test_integration_helper import validate_openweathermap_key
 
 
+
+@skipIf(not validate_openweathermap_key(), 'Please set valid API key')
 class TestViewIntegrationGetWeather(TestCase):
     def setUp(self) -> None:
         self.LATITUDE = -6.9345
