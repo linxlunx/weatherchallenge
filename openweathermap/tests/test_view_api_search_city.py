@@ -21,8 +21,8 @@ class TestViewFindCityByName(TestCase):
     @patch('openweathermap.utils.OpenWeatherMapUtil.find_city_by_name')
     def test_view_search_city_success(self, mock_get):
         mock_get.return_value = self.EXPECTED_CITY_SUCCESS_RESPONSE
-        get_weather_url = f"{reverse('openweathermap:openweathermap_search_city_api')}?name=Bandung"
-        response = self.client.get(path=get_weather_url)
+        get_city_url = f"{reverse('openweathermap:openweathermap_search_city_api')}?name=Bandung"
+        response = self.client.get(path=get_city_url)
         self.assertDictEqual(response.json(), {'cities': self.EXPECTED_CITY_SUCCESS_RESPONSE})
 
     @override_settings(CACHES={
@@ -37,8 +37,8 @@ class TestViewFindCityByName(TestCase):
     @patch('openweathermap.utils.OpenWeatherMapUtil.find_city_by_name')
     def test_view_search_empty_city_success(self, mock_get):
         mock_get.return_value = []
-        get_weather_url = f"{reverse('openweathermap:openweathermap_search_city_api')}?name=Bandung"
-        response = self.client.get(path=get_weather_url)
+        get_city_url = f"{reverse('openweathermap:openweathermap_search_city_api')}?name=Bandung"
+        response = self.client.get(path=get_city_url)
         self.assertDictEqual(response.json(), {'cities': []})
 
 
