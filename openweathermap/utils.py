@@ -97,5 +97,7 @@ class OpenWeatherMapUtil:
         resp['temperatures_min'] = self.convert_temperature(resp['main']['temp_min'])
         resp['temperatures_max'] = self.convert_temperature(resp['main']['temp_max'])
 
+        resp['wind']['speed_mph'] = '{:.2f}'.format(resp['wind']['speed'] * 2.237)
+
         cache.set(f'{self.lang}_{lat}_{lon}', resp)
         return resp

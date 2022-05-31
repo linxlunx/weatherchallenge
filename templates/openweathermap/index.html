@@ -67,15 +67,17 @@
                     </tr>
                     <tr>
                         <th>{% trans "Pressure" %}</th>
-                        <td>{{ weather.main.pressure }}</td>
+                        <td>{{ weather.main.pressure }} hPa</td>
                     </tr>
                     <tr>
                         <th>{% trans "Humidity" %}</th>
-                        <td>{{ weather.main.humidity }}</td>
+                        <td>{{ weather.main.humidity }} %</td>
                     </tr>
                     <tr>
                         <th>{% trans "Wind Speed" %}</th>
-                        <td>{{ weather.wind.speed }}</td>
+                        <td>{{ weather.wind.speed }} m/s</td>
+                        <td>{{ weather.wind.speed_mph }} mph</td>
+
                     </tr>
                     <tr>
                         <th>{% trans "Wind Direction" %}</th>
