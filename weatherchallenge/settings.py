@@ -41,8 +41,7 @@ SECRET_KEY = env.str('SECRET_KEY', default='django-insecure-@r9_xy_pn2n=ub%hs(5y
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env.bool('DEBUG', default=False)
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = env.str('ALLOWED_HOSTS', '').split()
 
 # Application definition
 
