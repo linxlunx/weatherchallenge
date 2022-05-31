@@ -52,12 +52,18 @@ class OpenWeatherMapUtil:
             else:
                 local_name = r['name']
 
+            if 'state' in r:
+                state = r['state']
+            else:
+                state = local_name
+
             cities.append({
-                'id': f"{r['name']}-{r['country']}",
+                'id': f"{r['name']}-{state}-{r['country']}",
                 'name': r['name'],
                 'local_name': local_name,
                 'lat': r['lat'],
                 'lon': r['lon'],
+                'states': state,
                 'country': r['country'],
             })
 

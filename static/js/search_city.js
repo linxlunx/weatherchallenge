@@ -13,7 +13,7 @@ $('#city_form').select2({
         processResults: function (data) {
             let newData = []
             $.each(data.cities, function (i, d) {
-                let city_fullname = [d.local_name, d.country]
+                let city_fullname = [d.local_name, d.states, d.country]
                 newData.push({id: d.id, text: city_fullname.join(", "), latitude: d.lat, longitude: d.lon})
             })
             return {
