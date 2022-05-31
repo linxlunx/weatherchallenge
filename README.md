@@ -16,7 +16,7 @@ $ cp weatherchallenge/.env.example weatherchallenge/.env
 - Fill `OPENWEATHERMAP_API_KEY` variable in `.env` with api key from [OpenWeatherMap](https://home.openweathermap.org)
 - We are using [Memcached](https://memcached.org/) for the cache server. Set `MEMCACHED_HOST` for the memcached server.
 - We can set the cache timeout (in minutes) by setting the `MEMCACHED_TIMEOUT`
-- If you want to use custom domain, please set `ALLOWED_HOSTS` variable. Separate the domain by comma if you want to use multiple domain.
+- If you want to use custom domain, please set `ALLOWED_HOSTS` variable. Separate the domain by comma if you want to use multiple domain. If the variable is empty, it will only allow `localhost` and `127.0.0.1`
 ```
 ALLOWED_HOSTS=domain.custom,domain2.custom
 ```
