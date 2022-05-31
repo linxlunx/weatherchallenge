@@ -1,12 +1,9 @@
 from django.test import TestCase, override_settings
-from openweathermap.utils import OpenWeatherMapUtil
-from asynctest import CoroutineMock, patch
-from django.core.cache import cache
+from asynctest import patch
 from django.urls import reverse
-import json
 
 
-class TestUtilFindCityByName(TestCase):
+class TestViewFindCityByName(TestCase):
     def setUp(self) -> None:
         self.EXPECTED_CITY_SUCCESS_RESPONSE = [
             {"id": "Bandung-ID", "name": "Bandung", "local_name": "Bandung", "lat": -6.9344694, "lon": 107.6049539,
@@ -20,24 +17,28 @@ class TestUtilFindCityByName(TestCase):
              "country": "ID"}]
 
     @override_settings(CACHES={
-            'default': {'BACKEND': 'django.core.cache.backends.locmem.LocMemCache', 'LOCATION': 'weatherchallenge'}})
-    def test_view_search_city_success(self):
+            'default': {'BACKEND': 'django.core.cache.backends.dummy.DummyCache'}})
+    @patch('openweathermap.utils.OpenWeatherMapUtil.find_city_by_name')
+    def test_view_search_city_success(self, mock_get):
+        mock_get.return_value = self.EXPECTED_CITY_SUCCESS_RESPONSE
         get_weather_url = f"{reverse('openweathermap:openweathermap_search_city_api')}?name=Bandung"
         response = self.client.get(path=get_weather_url)
         self.assertDictEqual(response.json(), {'cities': self.EXPECTED_CITY_SUCCESS_RESPONSE})
 
     @override_settings(CACHES={
-        'default': {'BACKEND': 'django.core.cache.backends.locmem.LocMemCache', 'LOCATION': 'weatherchallenge'}})
-    def test_view_search_city_success_in_cache(self):
-        get_weather_url = f"{reverse('openweathermap:openweathermap_search_city_api')}?name=Bandung"
-        response = self.client.get(path=get_weather_url)
-        self.assertListEqual(cache.get('en_Bandung'), self.EXPECTED_CITY_SUCCESS_RESPONSE)
+        'default': {'BACKEND': 'django.core.cache.backends.dummy.DummyCache'}})
+    def test_view_search_city_failed_no_param_city(self):
+        get_city_url = f"{reverse('openweathermap:openweathermap_search_city_api')}"
+        response = self.client.get(path=get_city_url)
+        self.assertEqual(response.status_code, 412)
 
     @override_settings(CACHES={
-        'default': {'BACKEND': 'django.core.cache.backends.locmem.LocMemCache', 'LOCATION': 'weatherchallenge'}})
-    def test_view_search_city_failed_no_param_city(self):
-        get_weather_url = f"{reverse('openweathermap:openweathermap_search_city_api')}"
+        'default': {'BACKEND': 'django.core.cache.backends.dummy.DummyCache'}})
+    @patch('openweathermap.utils.OpenWeatherMapUtil.find_city_by_name')
+    def test_view_search_empty_city_success(self, mock_get):
+        mock_get.return_value = []
+        get_weather_url = f"{reverse('openweathermap:openweathermap_search_city_api')}?name=Bandung"
         response = self.client.get(path=get_weather_url)
-        self.assertEqual(response.status_code, 412)
+        self.assertDictEqual(response.json(), {'cities': []})
 
 
