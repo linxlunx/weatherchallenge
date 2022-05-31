@@ -80,6 +80,9 @@ class OpenWeatherMapUtil:
 
     @decorators.use_cache
     async def get_weather(self, lat: float, lon: float) -> dict:
+        """
+        Get weather detail from openweathermap
+        """
         # get weather detail from openweathermap
         weather_detail_path = f'data/2.5/weather?lat={lat}&lon={lon}&units=metric'
         weather_detail_url = self.build_url(weather_detail_path)
