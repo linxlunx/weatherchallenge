@@ -9,7 +9,7 @@ Weather Challenge is a website to check the weather by location name. The websit
 - Memcached
 
 ## Configuration
-- Copy `.env.example` to `.env`
+- Create the `.env` file from `.env.example`. The environment file must be same in the same directory as `settings.py`.
 ```
 $ cp weatherchallenge/.env.example weatherchallenge/.env
 ``` 
